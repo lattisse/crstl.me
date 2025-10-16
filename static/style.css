@@ -1,0 +1,58 @@
+:root {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #0a0a0a;
+    color: white;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Atkinson Hyperlegible", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 80%;
+    max-width: 1000px;
+}
+
+::selection {
+    background-color: aliceblue;
+    color: #0a0a0a;
+}
+
+::-moz-selection {
+    background-color: aliceblue;
+    color: #0a0a0a;
+}
+
+.greeting {
+    margin-top: 3rem;
+    font-size: 3rem;
+}
+
+.currently {
+    color: mediumaquamarine;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+a {
+    color: #66c0ff;
+    text-decoration: none;
+}
