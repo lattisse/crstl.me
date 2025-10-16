@@ -41,6 +41,16 @@ body {
     font-size: 3rem;
 }
 
+@media (max-width: 725px) {
+    .greeting {
+        font-size: 2rem; /* smaller size for mobile */
+        margin-top: 2rem;
+    }
+    .hide {
+        display: none;
+    }
+}
+
 .currently {
     color: mediumaquamarine;
 }
