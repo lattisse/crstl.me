@@ -46,23 +46,47 @@ body {
         font-size: 2rem; /* smaller size for mobile */
         margin-top: 2rem;
     }
-    .hide {
-        display: none;
-    }
 }
 
 .currently {
     color: mediumaquamarine;
 }
 
-.list {
+.list,
+.nav {
     list-style: none;
     margin: 0;
     padding: 0;
     text-decoration: none;
 }
 
+.nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
 a {
     color: #66c0ff;
     text-decoration: none;
+}
+
+.title {
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 0;
+}
+
+.date {
+    margin-top: 0.2rem;
+}
+
+p {
+    margin-top: 0rem;
+}
+
+.linktitle {
+    margin-top: 0.5rem;
 }
