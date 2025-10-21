@@ -90,3 +90,36 @@ p {
 .linktitle {
     margin-top: 0.5rem;
 }
+
+.posts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.posts li a {
+    font-weight: bold;
+}
+
+.posts li .date,
+.date {
+    display: block;
+    font-size: 18px;
+    color: #ccc;
+    margin-top: 0.2em;
+}
+
+.tagline {
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.posts li .tagline {
+    font-size: 18px;
+    margin-top: 0.2em;
+}
