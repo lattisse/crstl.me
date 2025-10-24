@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /templates/
+Disallow: /posts-md/
+Disallow: /build.py
+
 
 Sitemap: https://crstl.me/sitemap.xml
