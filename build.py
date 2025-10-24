@@ -107,3 +107,27 @@ if blog_index_template:
     print("Generated blogs/index.html")
 else:
     print("No blog index template found — skipped index generation.")
+
+# Generate sitemap
+
+sitemap_entries = [
+    f"  <url>\n    <loc>https://crstl.me/</loc>\n    <priority>1.0</priority>\n  </url>",
+    f"  <url>\n    <loc>https://crstl.me/blogs/</loc>\n    <priority>0.8</priority>\n  </url>",
+]
+
+for _, _, folder_name, _ in sorted_posts:
+    sitemap_entries.append(
+        f"  <url>\n    <loc>https://crstl.me/blogs/{folder_name}/</loc>\n    <priority>0.8</priority>\n  </url>"
+    )
+
+sitemap_content = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + "\n".join(sitemap_entries)
+    + "\n</urlset>\n"
+)
+
+with open("sitemap.xml", "w", encoding="utf-8") as f:
+    f.write(sitemap_content)
+
+print("Generated sitemap.xml")
