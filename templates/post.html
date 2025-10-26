@@ -8,7 +8,7 @@
         <meta property="og:title" content="{{ title }}" />
         <meta property="og:description" content="{{ tag }}" />
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="crstl.me" />
+        <meta property="og:site_name" content="crstl" />
         <link rel="stylesheet" href="../../static/style.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,14 +21,27 @@
             href="/static/images/gfavicon.png"
             type="image/x-icon"
         />
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                "headline": "{{ title }}",
+                "author": {
+                    "@type": "Person",
+                    "name": "Crystal"
+                },
+                "datePublished": "{{ date }}",
+                "description": "{{ tag }}"
+            }
+        </script>
         <title>{{ title }} - crstl</title>
     </head>
     <body>
         <div class="container">
-            <ul class="nav">
+            <nav="nav">
                 <li><a href="/">home</a></li>
                 <li><a href="/blogs/">blog</a></li>
-            </ul>
+            <nav>
 
             <h1 class="title">{{ title }}</h1>
             <p class="tagline">{{ tag }}</p>
