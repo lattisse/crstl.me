@@ -60,8 +60,11 @@ body {
     text-decoration: none;
 }
 
-.nav {
+nav {
     width: 100%;
+}
+
+.nav {
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem;
@@ -97,7 +100,8 @@ p {
     padding: 0;
 }
 
-h3 {
+h2 {
+    font-size: 1.17em;
     margin-top: 0.2em;
     margin-bottom: 0.2em;
 }
