@@ -48,8 +48,8 @@ body {
     max-width: 48em;
     width: 80%;
     margin: auto;
-    color: #c9c9c9;
-    background-color: #222222;
+    color: #ffffff;
+    background-color: #121212;
     padding: 13px;
 }
 
@@ -130,14 +130,11 @@ hr {
 
 a {
     text-decoration: none;
-    color: #ffffff;
+    color: #66b3ff;
 }
-a:visited {
-    color: #e6e6e6;
-}
+
 a:hover {
-    color: #c9c9c9;
-    border-bottom: 2px solid #c9c9c9;
+    color: #4da6ff;
 }
 
 ul {

@@ -1,8 +1,66 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Github from "../assets/icons/github.svg";
+import Email from "../assets/icons/envelope-at-fill.svg";
+import Discord from "../assets/icons/discord.svg";
 ---
 
 <Layout>
     <h1>crystal / lattisse</h1>
-    <p>hi hi</p>
+    <p>
+        Hi! I'm Crystal. I do a bit of programming, some homelabbing, and play a
+        lot of games. Right now, I'm learning C++, drawing, and 3D modeling. I
+        like physics, rockets, and space.
+    </p>
+    <p>Currently reading <span>A Short History of Nearly Everything</span></p>
+    <h2>recent posts</h2>
+    <ul>
+        <li>
+            <a href="#" target="_blank">test placeholder 1</a>
+        </li>
+        <li>
+            <a href="#" target="_blank">test placeholder 2</a>
+        </li>
+    </ul>
+    <h2>links</h2>
+    <ul>
+        <li>
+            <Discord />
+            <a
+                href="https://discord.com/users/541270973375184906"
+                target="_blank">@lattisse</a
+            >
+        </li>
+        <li>
+            <Github />
+            <a href="https://github.com/lattisse" target="_blank">lattisse</a>
+        </li>
+        <li>
+            <Email />
+            <a href="mailto:hi@crstl.me" target="_blank">hi@crstl.me</a>
+        </li>
+    </ul>
 </Layout>
+
+<style>
+    li {
+        list-style: none;
+        margin: 0;
+    }
+
+    ul {
+        padding: 0;
+    }
+
+    span {
+        color: lightgreen;
+    }
+    @media (max-width: 684px) {
+        h1 {
+            margin-top: 1.5rem;
+        }
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+</style>
