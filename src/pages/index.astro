@@ -3,6 +3,10 @@ import Layout from "../layouts/Layout.astro";
 import Github from "../assets/icons/github.svg";
 import Email from "../assets/icons/envelope-at-fill.svg";
 import Discord from "../assets/icons/discord.svg";
+import { getCollection } from "astro:content";
+const posts = (await getCollection("blog"))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 2);
 ---
 
 <Layout>
@@ -13,16 +17,24 @@ import Discord from "../assets/icons/discord.svg";
         like physics, rockets, and space.
     </p>
     <p>Currently reading <span>A Short History of Nearly Everything</span></p>
-    <h2>recent posts</h2>
+    <h3>recent posts</h3>
     <ul>
-        <li>
-            <a href="#" target="_blank">test placeholder 1</a>
-        </li>
-        <li>
-            <a href="#" target="_blank">test placeholder 2</a>
-        </li>
+        {
+            posts.map((post) => (
+                <li class="blinks">
+                    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                    <span style="color:#ccc; margin-left: 1rem; font-size: 0.9em;">
+                        {
+                            new Date(post.data.pubDate)
+                                .toISOString()
+                                .split("T")[0]
+                        }
+                    </span>
+                </li>
+            ))
+        }
     </ul>
-    <h2>links</h2>
+    <h3>links</h3>
     <ul>
         <li>
             <Discord />
@@ -52,15 +64,10 @@ import Discord from "../assets/icons/discord.svg";
         padding: 0;
     }
 
-    span {
-        color: lightgreen;
+    .blinks a {
+        color: inherit;
     }
-    @media (max-width: 684px) {
-        h1 {
-            margin-top: 1.5rem;
-        }
-    }
-    h2 {
-        font-size: 1.5em;
+    .blinks a:hover {
+        text-decoration: underline;
     }
 </style>

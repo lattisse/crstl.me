@@ -1,0 +1,58 @@
+---
+title: "Solving Low FPS on External Monitor in Wayland with NVIDIA"
+pubDate: "2025-11-15"
+---
+
+After connecting my old laptop that has hybrid graphics to my external monitor, I noticed that my external monitor was running at half the set frame rate on KDE Plasma even though it ran perfectly fine on Windows. I tried searching for solutions but found none of them really worked; most solutions focused on NVIDIA drivers and parameters, and while some parameters did make it a little better, it was still very noticeable.
+
+Turns out that the issue was caused by KWin rendering the external monitor using the integrated graphics card instead of the dedicated NVIDIA card even though the HDMI output was directly connected to the NVIDIA card. So the culprit here was [Reverse Prime](https://wiki.archlinux.org/title/PRIME#Reverse_PRIME).
+
+### The Solution
+For those with BIOS options to switch the GPU, you can set it to use the NVIDIA card and it should work perfectly fine. But if you don't have that option, move on to the following solutions depending on if you are in X11 or Wayland.
+
+#### X11
+[EnvyControl](https://github.com/bayasdev/envycontrol) can be used to easily switch between the integrated and dedicated GPUs. Changing from Hybrid mode to Nvidia should fix the issue.
+On Arch Linux, EnvyControl is available in the AUR:
+
+```bash
+yay -S envycontrol
+```
+Releases for other distributions can be found on their GitHub at [https://github.com/bayasdev/envycontrol](https://github.com/bayasdev/envycontrol).
+
+After installing it, run the following and restart; it should fix the issue.
+
+```bash
+sudo envycontrol -s nvidia
+```
+
+#### Wayland
+
+I use KDE Plasma and haven't tested if the same happens in other desktop environments, but if it does, then there might be something similar that applies for that desktop environment as well. 
+
+For KDE Plasma we tell `kwin_wayland` to explicitly use the NVIDIA GPU for rendering through the [KWIN_DRM_DEVICES](https://invent.kde.org/plasma/kwin/-/wikis/Environment-Variables#kwin_drm_devices) environment variable in `/etc/environment`.
+
+- First run `lspci` to find the PCI address of GPUs.
+```bash
+lspci | grep NVIDIA
+lspci | grep Graphics
+```
+This should give similar output as the following.
+```bash
+01:00.0 VGA compatible controller: NVIDIA Corporation GA107M [GeForce RTX 3050 Mobile] (rev a1)
+01:00.1 Audio device: NVIDIA Corporation GA107 High Definition Audio Controller (rev a1)
+00:02.0 VGA compatible controller: Intel Corporation CometLake-H GT2 [UHD Graphics] (rev 05)
+```
+
+- Next we add the variable `KWIN_DRM_DEVICES` in `/etc/environment`. In my case it will be:
+```bash
+KWIN_DRM_DEVICES="/dev/dri/by-path/pci-0000\:01\:00.0-card:/dev/dri/by-path/pci-0000\:00\:02.0-card"
+```
+Here the order takes priority; we add the address of the NVIDIA GPU first to ensure that it is used for rendering. You will need to change the addresses according to your PCI address.
+
+And we are done; after a reboot the sluggish experience should be gone. The only catch is that the battery life decreases significantly, and your VRAM usage will also be a little higher as everything is rendered on the NVIDIA GPU.
+
+Credits:
+
+- [https://forums.developer.nvidia.com/t/nvidia-please-get-it-together-with-external-monitors-on-wayland/301684](https://forums.developer.nvidia.com/t/nvidia-please-get-it-together-with-external-monitors-on-wayland/301684)
+- [https://www.reddit.com/r/archlinux/comments/134q5fz/external_monitor_input_feels_laggy_and_slow/](https://www.reddit.com/r/archlinux/comments/134q5fz/external_monitor_input_feels_laggy_and_slow/)
+- [https://www.reddit.com/r/kde/comments/18tqx2k/laggy_display_when_using_egpu_on_fedora_kde_spin/](https://www.reddit.com/r/kde/comments/18tqx2k/laggy_display_when_using_egpu_on_fedora_kde_spin/)
