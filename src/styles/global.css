@@ -55,12 +55,12 @@ body {
 
 @media (max-width: 684px) {
     body {
-        font-size: 1.53rem;
+        font-size: 1.73rem;
     }
 }
 @media (max-width: 382px) {
     body {
-        font-size: 1.35rem;
+        font-size: 1.53rem;
     }
 }
 h1,
