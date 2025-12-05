@@ -52,18 +52,18 @@ body {
     background-color: #121212;
     padding: 13px;
 }
-/*
+
 @media (max-width: 684px) {
     body {
-        font-size: 1.73rem;
+        font-size: 1.6rem;
     }
 }
 @media (max-width: 382px) {
     body {
-        font-size: 1.53rem;
+        font-size: 1.4rem;
     }
 }
-*/
+
 h1,
 h2,
 h3,
