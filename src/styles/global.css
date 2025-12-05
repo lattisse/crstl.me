@@ -52,7 +52,7 @@ body {
     background-color: #121212;
     padding: 13px;
 }
-
+/*
 @media (max-width: 684px) {
     body {
         font-size: 1.73rem;
@@ -63,6 +63,7 @@ body {
         font-size: 1.53rem;
     }
 }
+*/
 h1,
 h2,
 h3,
