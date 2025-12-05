@@ -6,7 +6,10 @@ const posts = (await getCollection("blog")).sort(
 );
 ---
 
-<Layout title="blog">
+<Layout
+    title="blog"
+    description="Linux, coding, physics, and the universe. Mostly random stuff I find cool or want to experiment with."
+>
     <h1>blog</h1>
     <ul>
         {
