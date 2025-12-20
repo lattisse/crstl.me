@@ -1,6 +1,6 @@
 ---
-title: "Solving Low FPS on External Monitor in Wayland with NVIDIA"
-description: "Fix laggy external monitors on Linux with NVIDIA GPUs on hybrid laptops in KDE Plasma by forcing the system to use the dedicated GPU."
+title: "Solving External Monitor Lag on Linux"
+description: "Fix external monitor lag on Linux caused by hybrid graphics and compositor GPU selection issues."
 pubDate: "2025-11-15"
 ---
 
@@ -27,15 +27,11 @@ sudo envycontrol -s nvidia
 ```
 
 #### Wayland
+I mostly use KDE Plasma and sometimes GNOME, so the following solutions apply to those two. If you are having issues on any other desktop environment, you can try looking for a way to change the primary GPU used.
 
-I use KDE Plasma and haven't tested if the same happens in other desktop environments, but if it does, then there might be something similar that applies for that desktop environment as well. 
-
-For KDE Plasma we tell `kwin_wayland` to explicitly use the NVIDIA GPU for rendering through the [KWIN_DRM_DEVICES](https://invent.kde.org/plasma/kwin/-/wikis/Environment-Variables#kwin_drm_devices) environment variable in `/etc/environment`.
-
-- First run `lspci` to find the PCI address of GPUs.
+- First, run `lspci` to find the PCI address of GPUs.
 ```bash
-lspci | grep NVIDIA
-lspci | grep Graphics
+lspci | grep -E "NVIDIA|Graphics"
 ```
 This should give similar output as the following.
 ```bash
@@ -43,14 +39,47 @@ This should give similar output as the following.
 01:00.1 Audio device: NVIDIA Corporation GA107 High Definition Audio Controller (rev a1)
 00:02.0 VGA compatible controller: Intel Corporation CometLake-H GT2 [UHD Graphics] (rev 05)
 ```
+For KDE Plasma, we tell `kwin_wayland` to explicitly use the NVIDIA GPU for rendering through the [KWIN_DRM_DEVICES](https://invent.kde.org/plasma/kwin/-/wikis/Environment-Variables#kwin_drm_devices) environment variable in `/etc/environment`.
 
-- Next we add the variable `KWIN_DRM_DEVICES` in `/etc/environment`. In my case it will be:
+- Add the variable `KWIN_DRM_DEVICES` to `/etc/environment`. In my case, it looks like this:
 ```bash
 KWIN_DRM_DEVICES="/dev/dri/by-path/pci-0000\:01\:00.0-card:/dev/dri/by-path/pci-0000\:00\:02.0-card"
 ```
-Here the order takes priority; we add the address of the NVIDIA GPU first to ensure that it is used for rendering. You will need to change the addresses according to your PCI address.
+Here the order takes priority; we add the address of the NVIDIA GPU first to ensure that it is used for rendering. You will need to change the addresses according to your PCI address. After doing this, reboot your system, and your external display should be smooth.
 
-And we are done; after a reboot the sluggish experience should be gone. The only catch is that the battery life decreases significantly, and your VRAM usage will also be a little higher as everything is rendered on the NVIDIA GPU.
+For GNOME, we add a [udev rule](https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1562) to select primary GPU. 
+- First verify your Nvidia GPU's DRM device node. Run:
+```bash
+ls -l /dev/dri/
+```
+This should output something similar as the following.
+```bash
+drwxr-xr-x  2 root root        120 Dec 20 13:59 by-path
+crw-rw----+ 1 root video  226,   0 Dec 20 13:59 card0
+crw-rw----+ 1 root video  226,   1 Dec 20 13:59 card1
+crw-rw-rw-  1 root render 226, 128 Dec 20 13:59 renderD128
+crw-rw-rw-  1 root render 226, 129 Dec 20 13:59 renderD129
+```
+Now, check the PCI address of our card0 and card1 to determine which one is Nvidia GPU. 
+- Run `lspci` command from above if you haven't already.
+- Run `readlink -f /sys/class/drm/cardX/device` to find the PCI address.
+```bash
+readlink -f /sys/class/drm/card0/device
+```
+For me, this outputs 
+```bash 
+/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0
+``` 
+This matches my Nvidia GPU's address of `01:00.0`. So for me `card0` is Nvidia GPU.
+- Create a new udev rule in `/etc/udev/rules.d/` (path may vary depending on distribution).
+```bash
+sudo nano /etc/udev/rules.d/61-mutter-preferred-primary-gpu.rules
+```
+- Add the line `ENV{DEVNAME}=="/dev/dri/cardX", TAG+="mutter-device-preferred-primary"`, replacing cardX with card number of your Nvidia GPU.
+```bash
+ENV{DEVNAME}=="/dev/dri/card0", TAG+="mutter-device-preferred-primary"
+```
+And we are done; after a reboot the sluggish experience should be gone. The only downside is that the battery life decreases significantly, and your VRAM usage will also be a little higher as everything is rendered on the NVIDIA GPU.
 
 Credits:
 
@@ -58,3 +87,5 @@ Credits:
 - [https://www.reddit.com/r/archlinux/comments/134q5fz/external_monitor_input_feels_laggy_and_slow/](https://www.reddit.com/r/archlinux/comments/134q5fz/external_monitor_input_feels_laggy_and_slow/)
 - [https://www.reddit.com/r/kde/comments/18tqx2k/laggy_display_when_using_egpu_on_fedora_kde_spin/](https://www.reddit.com/r/kde/comments/18tqx2k/laggy_display_when_using_egpu_on_fedora_kde_spin/)
 - [https://tongkl.com/kde-plasma-laggy-external-monitor/](https://tongkl.com/kde-plasma-laggy-external-monitor/)
+-[https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1562](https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1562)
+-[https://darkghosthunter.medium.com/bluefin-making-your-nvidia-dgpu-primary-for-external-monitors-0b5a293a4b9f](https://darkghosthunter.medium.com/bluefin-making-your-nvidia-dgpu-primary-for-external-monitors-0b5a293a4b9f)
