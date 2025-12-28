@@ -4,7 +4,7 @@ description: "Fix external monitor lag on Linux caused by hybrid graphics and co
 pubDate: "2025-11-15"
 ---
 
-After connecting my old laptop that has hybrid graphics to my external monitor, I noticed that my external monitor was running at half the set frame rate on KDE Plasma even though it ran perfectly fine on Windows. I tried searching for solutions but found none of them really worked; most solutions focused on NVIDIA drivers and parameters, and while some parameters did make it a little better, it was still very noticeable.
+After connecting my laptop that has hybrid graphics to my external monitor, I noticed that my external monitor was running at half the set frame rate on KDE Plasma even though it ran perfectly fine on Windows. I tried searching for solutions but found none of them really worked; most solutions focused on NVIDIA drivers and parameters, and while some parameters did make it a little better, it was still very noticeable.
 
 Turns out that the issue was caused by KWin rendering the external monitor using the integrated graphics card instead of the dedicated NVIDIA card even though the HDMI output was directly connected to the NVIDIA card. So the culprit here was [Reverse Prime](https://wiki.archlinux.org/title/PRIME#Reverse_PRIME).
 
